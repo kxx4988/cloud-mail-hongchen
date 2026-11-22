@@ -439,6 +439,9 @@ const zh = {
     // [S23] 自研：管理员是否接收全站推送
     tgBroadcast: '接收全站推送',
     tgBroadcastDesc: '开启时，全站所有账号的邮件都会推送到这里的 ChatID；关闭后只推送管理员本人名下账号的邮件',
+    // [S57] 自研：无人收件是否推送
+    tgNooneNotify: '推送无人收件',
+    tgNooneNotifyDesc: '收到本站不存在对应账号的邮件（无人收件）时也推送；与「接收全站推送」相互独立，其他用户的邮件不会因此推送',
     disable: '关闭',
     disabled: '已关闭',
     otherEmail: '第三方邮箱',

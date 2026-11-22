@@ -45,6 +45,8 @@ const dbInit = {
 		await this.v3_6GatewayDB(c);
 		// [S55] 网关心跳：密钥 + 上报状态（逐列 catch，防旧库整批失败）
 		await this.v3_6HbDB(c);
+		// [S57] 无人收件推送开关（与全站推送独立）
+		await this.v3_6NooneNotifyDB(c);
 		await settingService.refresh(c);
 		return c.text('success');
 	},
@@ -106,6 +108,16 @@ const dbInit = {
 			} catch (e) {
 				console.warn(`跳过字段：${e.message}`);
 			}
+		}
+	},
+
+	// [S57] 无人收件推送开关：只有一列，与 tg_broadcast 相互独立。
+	// 默认 1（推），保证加列瞬间行为与加列前一致。
+	async v3_6NooneNotifyDB(c) {
+		try {
+			await c.env.db.prepare(`ALTER TABLE setting ADD COLUMN tg_noone_notify INTEGER NOT NULL DEFAULT 1`).run();
+		} catch (e) {
+			console.warn(`跳过字段：${e.message}`);
 		}
 	},
 

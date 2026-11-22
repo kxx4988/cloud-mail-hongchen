@@ -435,6 +435,9 @@ const en = {
     // [S23] Whether the admin receives site-wide push
     tgBroadcast: 'Receive site-wide push',
     tgBroadcastDesc: 'When on, mail from all accounts is pushed to these ChatIDs; when off, only the admin own accounts are pushed',
+    // [S57] Whether unclaimed mail is pushed
+    tgNooneNotify: 'Push unclaimed mail',
+    tgNooneNotifyDesc: 'Also push mail addressed to accounts that do not exist (unclaimed mail); independent of site-wide push, other users mail is never pushed by this',
     disable: 'Disable',
     disabled: 'Disabled',
     otherEmail: 'Forwarding to external email',

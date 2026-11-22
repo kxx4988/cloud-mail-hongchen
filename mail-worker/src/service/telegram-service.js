@@ -337,14 +337,24 @@ const telegramService = {
 
 	async sendEmailToBot(c, email) {
 
-		const { tgBotToken, tgChatId, customDomain, tgMsgTo, tgMsgFrom, tgMsgText, tgBroadcast } = await settingService.query(c);
+		const { tgBotToken, tgChatId, customDomain, tgMsgTo, tgMsgFrom, tgMsgText, tgBroadcast, tgNooneNotify } = await settingService.query(c);
 
 		// [S23] 「接收全站推送」开关：0 = 只推管理员本人名下账号的邮件（不是全都不推）。
 		// 字段缺失（KV 仍是加列前的旧缓存）一律按 1（开）处理，否则升级瞬间会被误判成关闭。
 		const broadcastOn = (tgBroadcast === undefined || tgBroadcast === null)
 			? true
 			: Number(tgBroadcast) === 1;
-		if (!broadcastOn) {
+		// [S57] 无人收件（user_id=0，不属于任何人）单独一个开关，与全站推送互不覆盖：
+		// 全站推送关着的时候，只要这个开关开着，无人收件仍然推给管理员。
+		// 字段缺失按「开」处理，保证加列瞬间行为与加列前一致。
+		const nooneNotifyOn = (tgNooneNotify === undefined || tgNooneNotify === null)
+			? true
+			: Number(tgNooneNotify) === 1;
+		if (Number(email.userId || 0) === 0) {
+			if (!nooneNotifyOn) {
+				return;
+			}
+		} else if (!broadcastOn) {
 			const adminUserId = await getOwnerUserId(c);
 			if (!adminUserId || Number(email.userId) !== Number(adminUserId)) {
 				return;

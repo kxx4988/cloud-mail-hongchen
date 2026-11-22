@@ -783,6 +783,13 @@
             </el-tooltip>
             <el-switch v-model="tgBroadcast" :active-value="1" :inactive-value="0"/>
           </div>
+          <!-- [S57] 自研：无人收件是否推送（1=推 0=不推），与「接收全站推送」相互独立 -->
+          <div class="tg-msg-label">
+            <el-tooltip effect="dark" :content="t('tgNooneNotifyDesc')" placement="top">
+              <span>{{ t('tgNooneNotify') }}</span>
+            </el-tooltip>
+            <el-switch v-model="tgNooneNotify" :active-value="1" :inactive-value="0"/>
+          </div>
           <!-- [S29] 每个用户最多绑定几个通知（0 = 不限制） -->
           <div class="tg-msg-label">
             <el-tooltip effect="dark" :content="t('notifyBindLimitDesc')" placement="top">
@@ -1287,6 +1294,8 @@ const tgBotStatus = ref(0)
 const tgSpamNotify = ref(0)
 // [S23] 自研：接收全站推送（1=开＝全站所有用户的邮件，0=只收管理员本人名下账号），默认开
 const tgBroadcast = ref(1)
+// [S57] 自研：无人收件是否推送（1=推 0=不推），默认开
+const tgNooneNotify = ref(1)
 // [S29] 自研：每个用户最多绑定几个通知（0 = 不限制）
 const notifyBindLimit = ref(0)
 const tgBotToken = ref('')
@@ -1464,6 +1473,10 @@ function openTgSetting() {
   tgBroadcast.value = setting.value.tgBroadcast === undefined || setting.value.tgBroadcast === null
       ? 1
       : Number(setting.value.tgBroadcast)
+  // [S57] 无人收件推送：字段缺失按「开」处理
+  tgNooneNotify.value = setting.value.tgNooneNotify === undefined || setting.value.tgNooneNotify === null
+      ? 1
+      : Number(setting.value.tgNooneNotify)
   // [S29] 绑定数量上限：字段缺失按 0（不限制）
   notifyBindLimit.value = Number(setting.value.notifyBindLimit) > 0 ? Number(setting.value.notifyBindLimit) : 0
   tgBotToken.value = ''
@@ -1634,6 +1647,8 @@ function tgBotSave() {
     tgSpamNotify: tgSpamNotify.value,
     // [S23] 自研：接收全站推送（1=开 0=只收自己名下账号）
     tgBroadcast: tgBroadcast.value,
+    // [S57] 自研：无人收件是否推送（1=推 0=不推）
+    tgNooneNotify: tgNooneNotify.value,
     // [S29] 每个用户最多绑定几个通知（0 = 不限制）
     notifyBindLimit: notifyBindLimit.value
   }

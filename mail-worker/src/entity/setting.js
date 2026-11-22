@@ -87,6 +87,9 @@ export const setting = sqliteTable('setting', {
 	// [S23] 自研：管理员是否接收「全站推送」。1=开（全站所有用户的邮件都发到 tg_chat_id），
 	// 0=只发管理员本人名下账号的邮件。字段缺失时按「开」处理（KV 旧缓存里没有该字段）
 	tgBroadcast: integer('tg_broadcast').default(1).notNull(),
+	// [S57] 自研：无人收件（不属于任何账号的邮件）是否推送。1=推（默认），0=不推。
+	// 与 S23 的 tg_broadcast 相互独立：全站推送关掉后，这个开关仍可单独放开无人收件推送。
+	tgNooneNotify: integer('tg_noone_notify').default(1).notNull(),
 	// [S29] 自研：每个用户最多能绑几个 Telegram 通知（0 = 不限制，由管理员在系统设置里决定）。
 	// 一封邮件 = 每条绑定一次 Telegram 请求，绑太多会撞 Worker 单次调用的子请求上限并拖慢入站收信。
 	notifyBindLimit: integer('notify_bind_limit').default(0).notNull()
